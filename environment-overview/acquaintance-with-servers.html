@@ -1,0 +1,57 @@
+<!--
+title: Acquaintance with servers
+description: 
+published: true
+date: 2020-02-10T00:58:18.771Z
+tags: 
+-->
+
+<div>
+  <h1 id="acquaintance" class="toc-header"><a class="toc-anchor" href="#acquaintance">¶</a> Acquaintance with servers</h1>
+  <p>The Allods Environment has two spaces: base and shard parts.</p>
+ 
+  <h2>Base part</h2>
+  <p>The Base part is most important group of servers which should be started first. Allods Environment has only one base part which has following servers : </p>
+  <ul>
+    <li>Account Server is server that authenticates clients. After successful authentication that the connection with the client is being processed, the client itself connects to the Front End. </li>
+    <li>Billing Server is server that stores Item Mall currency information for each player.</li>
+    <li>Item Mall is server that processes requests to buy items. Requires Billing Server.</li>
+    <li>Master Server is server that accumulates and handle all connection between base and shards part. </li>
+    <li>Database server is server which stores information from Account Server, Billing Server, ItemMall Server. </li>
+    <li>Deploy/Backup server this is a deploy server, from which you have to deploy another services. Also to backup DBes from base part. Replication must be set for that by operator. </li>
+    <li>Log Server and GM tool servers(Stats Alarm) that collects all logs from the base servers. View and statistic analysis requests are addressed through GM Tools.</li>
+  </ul>
+  <blockquote class="is-info">
+    <p><span class="emoji">ℹ</span> We're looking for users that can create guide about GM Tools ! </p></blockquote>
+  <p>Reason for using the base part :</p>
+  <ul>
+    <li>Saving all information about accounts.</li>
+    <li>Money and items operations.</li>
+    <li>Servers controlling.</li>
+    <li>Providing access for users from base part to the shard.</li>
+  </ul>
+  <h2>Shard part</h2>
+  <p>The Allods Game Performance depends on count of shard. One shard has following servers :</p>
+  <ul>
+    <li>FrontEnds (2 pieces) that maintains connections with the clients after authentication. The main function of the Front End is to maintain connections with the clients playing on the shards. </li>
+    <li>GameMechanics (3 pieces) is server that calculates the in-game mechanics, provides services for parts of the world. </li>
+    <li>Item Server All In One or just  includes all dynamic in game data: characters, guilds, mail etc. </li>
+    <li>Deploy/Backup server this is a deploy server, from which you have to deploy another services. Also to backup DBes from shard part. Replication must be set for that by operator.</li>
+    <li>Log Server and GM tool servers(Stats Alarm) that collects all logs from the shard servers. View and statistic analysis requests are addressed through GM Tools.</li>
+  </ul>
+   <p>Reason for using the base part :</p>
+  <ul>
+    <li>Providing game play for the users. </li>
+    <li>Storing avatar information.</li>
+    <li>Storing items of avatars.</li>
+  </ul>
+   <h2>Torrents Servers</h2>
+  <blockquote class="is-info">
+    <p><span class="emoji">ℹ</span> We're looking for users that can explains more about Torrents Servers ! </p></blockquote>
+  <ul>
+    <li>Patch Server - Server that handle the client's updates.</li>
+    <li>Torrent Tracker - Specifies the client from where the updates should be downloaded. </li>
+    <li>Torrents Seeder - Seeder to give patches for client updates.</li>
+  </ul>
+  </div>
+
