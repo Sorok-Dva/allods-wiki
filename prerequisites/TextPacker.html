@@ -1,0 +1,70 @@
+<!--
+title: TextPacker
+description: TextPacker is a tool for converting Allods localization paks into XLSX files and vice versa. It was designed in an intention to replace our old localization tool (﻿ELK) which had issues in both performance and stability.
+published: true
+date: 2024-03-14T12:14:10.097Z
+tags: client, localization
+editor: ckeditor
+dateCreated: 2024-03-14T12:14:10.097Z
+-->
+
+<p>TextPacker is a tool for converting Allods localization paks into XLSX files and vice versa.<br>It was designed in an intention to replace our old localization tool (﻿<a href="http://localhost/display/GT/Text+localization.htm">ELK</a>) which had issues in both performance and stability.</p>
+<p>The program comes in two variations which only differ in user interface. You can use the console version in conjunction with BAT files.</p>
+<p>You can download the program (including source codes and libraries - feel free to use them if you wish) from <a href="https://community.allods-developers.eu/threads/text-packer.318/">here</a></p>
+<p>/Pub/Localization/Tools/TextPacker/
+</p>
+<p><strong>NOTE:</strong> Make sure to have .NET 4 Framework installed on your computer: <a href="javascript:if(confirm('http://www.microsoft.com/download/en/details.aspx?id=17851%20%20\n\nThis%20file%20was%20not%20retrieved%20by%20Teleport%20Ultra,%20because%20it%20is%20addressed%20on%20a%20domain%20or%20path%20outside%20the%20boundaries%20set%20for%20its%20Starting%20Address.%20%20\n\nDo%20you%20want%20to%20open%20it%20from%20the%20server?%27))window.location=%27http://www.microsoft.com/download/en/details.aspx?id=17851%27">http://www.microsoft.com/download/en/details.aspx?id=17851</a></p>
+<p>You must also be logged in with an account that has Administrative rights on the computer.</p>
+<h2><strong>Overview</strong></h2>
+<p>"Base pak" is no longer needed to make a PAK out of XLSX file. Converting a file into a different format is now performed in a single step. TextPacker reads paths directly from the first column of XLSX file and creates all folders and files from scratch. Content of the text files is read directly from the second column.</p>
+<p>Similarly, PAK file can be converted into XLSX without any unnecessary steps, all you need is to enter two file names.</p>
+<p>Starting from branch 3.0.00, the whole concept of "ELK project" becomes obsolete - instead, you are supposed to work with one and the same XLSX file within a branch, converting it into a PAK whenever you wish to test the localization or send the PAK to us for building a version.</p>
+<p>Legacy columns ("State", "Owner", "Description", "Source" "Glossary Item") were removed, as they are no longer needed. You can use the third and any subsequent columns for the source text, notes, comments etc., they are not processed during the conversion.</p>
+<p>Also, names of column headers are no longer relevant. All that matters to TextPacker are columns A and B of the spreadsheet, excluding line 1.</p>
+<p>Format of generated PAK file has been fixed - you no longer need to unpack it to see the localization in game, you can simply copy your PAK file into the <strong>data\Packs</strong> folder and delete <strong>pack.loc</strong> file from your <strong>BaseLoc.pak</strong>.</p>
+<p>Last but not least, TextPacker works much faster than ELK ;)</p>
+<h2><strong>Precautions</strong></h2>
+<p>&nbsp;It is recommended to use a single-sheet XLSX file (in case of different sheets, if you copy-pasted data from one sheet to another, renamed and/or moved the sheets, TextPacker may attempt to use the wrong sheet for conversion). TextPacker always converts a PAK into a single-sheet XLSX.</p>
+<p>Very large cells containing more than 20,000 characters are not supported (actually they are not supported by Excel, so we cannot reliably process them). If your DeniedWords or ChatFilterForbidden lists are more than 20k characters long, please add them into the PAK manually for the time being. We are currently working on addressing this issue (DeniedWords are going to be removed from the localization, they will be uploaded directly on server, while profanity filters are being reworked for branch 3.0.00/3.0.01).</p>
+<h2><strong>Usage</strong></h2>
+<p>Both GUI and console versions operate using the same logic.</p>
+<h3><strong>Syntax (ConsoleTextPacker.exe)</strong></h3>
+<p>- Create excel file from pak file:</p>
+<pre><code class="language-plaintext">ConsoleTextPacker.exe pak2xls &lt;PakFileName&gt; &lt;ExcelFileName&gt;
+</code></pre>
+<p>- Create pak file from excel file:</p>
+<pre><code class="language-plaintext">ConsoleTextPacker.exe xls2pak &lt;ExcelFileName&gt; &lt;PakFileName&gt;
+</code></pre>
+<p>- Create excel file from source folder. <strong>Source folder</strong> is where the PAK file is unpacked (although there is no need to unpack it at normal circumstances). <strong>Root folder</strong> is also used only in conjunction with unpacked PAKs. For most cases, <strong>Root folder</strong> and <strong>Source folder</strong> should be the same.</p>
+<pre><code class="language-plaintext">&nbsp;ConsoleTextPacker.exe src2xls &lt;RootFolder&gt; &lt;SourceFolder&gt; &lt;ExcelFileName&gt;
+</code></pre>
+<p>- Create pak file from source folder:</p>
+<pre><code class="language-plaintext">ConsoleTextPacker.exe src2pak &lt;RootFolder&gt; &lt;SourceFolder&gt; &lt;PakFileName&gt;
+</code></pre>
+<h3><strong>Examples</strong></h3>
+<pre><code class="language-plaintext">ConsoleTextPacker.exe pak2xls 3.0.00.pak 3.0.00.xlsx
+ConsoleTextPacker.exe pak2xls E:\TextPacker\3.0.00.pak E:\TextPacker\3.0.00.xlsx
+ConsoleTextPacker.exe xls2pak 3.0.00.xlsx 3.0.00.pak</code></pre>
+<h2><strong>Windows Explorer Integration</strong></h2>
+<p>You can easily integrate TextPacker into Windows Explorer context menu:</p>
+<figure class="image"><img src="http://localhost/download/attachments/40239606/TextPacker_ContextMenu.jpg-version=1&amp;modificationDate=1321889611000.jpg"></figure>
+<p>To do so, here's the reg file code</p>
+<pre><code class="language-plaintext">Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to PAK]
+
+[HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to PAK\command]
+@="C:\\TextPacker\\ConsoleTextPacker.exe xls2pak \"%1\" \"%1.pak\""
+
+[HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to XLSX]
+
+[HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to XLSX\command]
+@="C:\\TextPacker\\ConsoleTextPacker.exe pak2xls \"%1\" \"%1.xlsx\""
+
+</code></pre>
+<p>&nbsp;</p>
+<p>It is assumed that your TextPacker program is located in "C:\TextPacker\" folder. If you wish to use another folder, please amend the <strong>Registry.reg</strong> file accordingly. You can edit it using Notepad or any other text editor.</p>
+<p>Double-click <strong>Registry.reg</strong> file and select "Yes" to add the entries into Windows registry.</p>
+<p>Should you decide to remove these options from the context menu, run Regedit.exe and delete these two entries:</p>
+<p>HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to PAK
+  HKEY_CLASSES_ROOT\*\shell\TextPacker: Convert to XLSX</p>
